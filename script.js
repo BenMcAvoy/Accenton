@@ -49,22 +49,20 @@ document.addEventListener("keydown", function (event) {
   }
 
   if (currentLine.match(/^\d+\./) && event.key == "Enter") {
-    // Don't create a new line (we will make one manually)
     event.preventDefault();
-    
+
     // Get the next number
     const nextNumber = parseInt(currentLine) + 1;
 
-    // Get the text to make a new number
-    const addText = "\n" + nextNumber + ". ";
-    
-    // Fill out the rest of the text
-    const newText = text.value.substring(0, startPos) + addText;
+    // Create a new line with the same indentation as the current line
+    const currentLineIndentation = currentLine.match(/^\s*/)[0];
+    const addText = `${currentLineIndentation}${nextNumber}. `;
+
+    // Set the new text to insert the new item below the current line
+    const newText = text.value.substring(0, endPos) + `\n${addText}` + text.value.substring(endPos);
 
     // Get the new cursor position
-    const newCursorPos = startPos + addText.length;
-    
-    // text.value = newText.slice(0, -1);
+    const newCursorPos = endPos + addText.length;
 
     // Set all the values
     text.value = newText;
