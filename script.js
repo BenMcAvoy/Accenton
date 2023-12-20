@@ -62,7 +62,7 @@ document.addEventListener("keydown", function (event) {
     const newText = text.value.substring(0, endPos) + `\n${addText}` + text.value.substring(endPos);
 
     // Get the new cursor position
-    const newCursorPos = endPos + addText.length;
+    const newCursorPos = endPos + addText.length + 1;
 
     // Set all the values
     text.value = newText;
