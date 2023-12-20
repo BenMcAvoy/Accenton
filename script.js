@@ -34,8 +34,8 @@ document.addEventListener("keydown", function (event) {
     // If we got one
     if (char) {
       // Create the new text to set
-      const newText = text.value.substring(0, startPos) 
-        + char 
+      const newText = text.value.substring(0, startPos)
+        + char
         + text.value.substring(endPos, text.value.length);
 
       // Get the new cursor position
@@ -70,9 +70,32 @@ document.addEventListener("keydown", function (event) {
     text.selectionEnd = newCursorPos;
   }
 
+  if (currentLine.match(/^\d+\.?\s?$/) && event.key == "Backspace") {
+    event.preventDefault();
+
+    var cursorPosition = text.selectionStart;
+    var lines = text.value.split('\n');
+    var lineIndex = -1;
+    for (var i = 0; i < lines.length; i++) {
+      if (cursorPosition <= lines[i].length) {
+        lineIndex = i;
+        break;
+      }
+      cursorPosition -= lines[i].length + 1;
+    }
+
+    if (lineIndex == -1) {
+      lineIndex = lines.length - 1;
+    }
+
+    lines.splice(lineIndex, 1);
+    text.value = lines.join('\n') + "\n";
+  }
+
   // Save our current text
   localStorage.setItem('text', text.value);
 });
+
 
 // On the window loading
 window.onload = function () {
