@@ -78,11 +78,11 @@ document.addEventListener("keydown", function (event) {
     var cursorPos = text.selectionStart;
 
     if (cursorPos >= 3) {
-        var textBefore = text.value.substring(0, cursorPos -  3);
-        var textAfter = text.value.substring(cursorPos);
-        text.value = textBefore + textAfter;
+      var textBefore = text.value.substring(0, cursorPos -  3);
+      var textAfter = text.value.substring(cursorPos);
+      text.value = textBefore + textAfter;
 
-        text.selectionStart = text.selectionEnd = cursorPos -  3;
+      text.selectionStart = text.selectionEnd = cursorPos -  3;
     }
 
     console.log("Cleared line");
