@@ -16,40 +16,35 @@ const charMap = {
   '.': '»',
 };
 
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", function (keysDown) {
   // Get our basic variables and references to the textarea
   const text = document.getElementById('text');
   const startPos = text.selectionStart;
   const endPos = text.selectionEnd;
   const currentLine = text.value.substring(0, startPos).split('\n').pop();
 
-  // If we are holding alt
-  if (event.altKey) {
-    // Don't press the normal key
-    event.preventDefault();
+  if (keysDown.altKey) {
+    keysDown.preventDefault();
 
     // Get the accented version of the key
-    const char = charMap[event.key];
+    const char = charMap[keysDown.key];
 
-    // If we got one
     if (char) {
-      // Create the new text to set
       const newText = text.value.substring(0, startPos)
         + char
         + text.value.substring(endPos, text.value.length);
 
-      // Get the new cursor position
       const newCursorPos = startPos + char.length;
 
-      // Set all the values
       text.value = newText;
       text.selectionStart = newCursorPos;
       text.selectionEnd = newCursorPos;
     }
   }
 
-  if (currentLine.match(/^\d+\./) && event.key == "Enter") {
-    event.preventDefault();
+  // If our cursor is on a list item, add a new list item on newline
+  if (currentLine.match(/^\d+\./) && keysDown.key == "Enter") {
+    keysDown.preventDefault();
 
     // Get the next number
     const nextNumber = parseInt(currentLine) + 1;
@@ -64,16 +59,14 @@ document.addEventListener("keydown", function (event) {
     // Get the new cursor position
     const newCursorPos = endPos + addText.length + 1;
 
-    // Set all the values
     text.value = newText;
     text.selectionStart = newCursorPos;
     text.selectionEnd = newCursorPos;
   }
 
-  if (currentLine.match(/^\d+\.?\s?$/) && event.key == "Backspace") {
-    event.preventDefault();
-
-    console.log("Clearing line");
+  // If our cursor is on a number (list item), remove the whole list item
+  if (currentLine.match(/^\d+\.?\s?$/) && keysDown.key == "Backspace") {
+    keysDown.preventDefault();
 
     var cursorPos = text.selectionStart;
 
@@ -84,22 +77,18 @@ document.addEventListener("keydown", function (event) {
 
       text.selectionStart = text.selectionEnd = cursorPos -  3;
     }
-
-    console.log("Cleared line");
   }
 
-  // Save our current text
   localStorage.setItem('text', text.value);
 });
 
 
-// On the window loading
+// On the window loading, load the text from storage to synchronise with the
+// last instance of Accenton that was loaded.
 window.onload = function () {
-  // Get the texarea and saved text
   const text = document.getElementById('text');
   const savedValue = localStorage.getItem('text');
 
-  // Set the text from storage
   if (savedValue) {
     text.value = savedValue;
   }
