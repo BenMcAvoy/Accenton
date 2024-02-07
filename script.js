@@ -50,18 +50,17 @@ document.addEventListener("keydown", function (keysDown) {
     const nextNumber = parseInt(currentLine) + 1;
 
     // Create a new line with the same indentation as the current line
-    const currentLineIndentation = currentLine.match(/^\s*/)[0];
+    const currentLineIndentation = currentLine.match(/^\s*/)?.[0] || '';
     const addText = `${currentLineIndentation}${nextNumber}. `;
 
-    // Set the new text to insert the new item below the current line
-    const newText = text.value.substring(0, endPos) + `\n${addText}` + text.value.substring(endPos);
 
-    // Get the new cursor position
-    const newCursorPos = endPos + addText.length + 1;
+    // Calculate the new cursor position
+    const newCursorPos = endPos + addText.length +  1;
 
-    text.value = newText;
-    text.selectionStart = newCursorPos;
-    text.selectionEnd = newCursorPos;
+    // Insert the new item below the current line
+    text.value = `${text.value.slice(0, endPos)}\n${addText}${text.value.slice(endPos)}`;
+
+    text.selectionStart = text.selectionEnd = newCursorPos;
   }
 
   // If our cursor is on a number (list item), remove the whole list item
