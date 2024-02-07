@@ -1,3 +1,21 @@
+/* textarea { */
+/*   width: calc(100wh - 48px); */
+/* } */
+
+* {
+  background-color: #282828;
+  color: #ebdbb2;
+  font-family: JetBrainsMono Nerd Font, Arial;
+}
+
 textarea {
-  height: calc(100vh - 48px);
+  outline: solid #fe8019;
+  border-radius: 0.25rem;
+
+  margin: 1em;
+  padding: 1em;
+
+  width: calc(100% - 2em);
+  height: calc(100vh - 20px - 2em);
+  box-sizing: border-box; /* Include padding and border in total width and height */
 }
