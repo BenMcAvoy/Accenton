@@ -73,23 +73,19 @@ document.addEventListener("keydown", function (event) {
   if (currentLine.match(/^\d+\.?\s?$/) && event.key == "Backspace") {
     event.preventDefault();
 
-    var cursorPosition = text.selectionStart;
-    var lines = text.value.split('\n');
-    var lineIndex = -1;
-    for (var i = 0; i < lines.length; i++) {
-      if (cursorPosition <= lines[i].length) {
-        lineIndex = i;
-        break;
-      }
-      cursorPosition -= lines[i].length + 1;
+    console.log("Clearing line");
+
+    var cursorPos = text.selectionStart;
+
+    if (cursorPos >= 3) {
+        var textBefore = text.value.substring(0, cursorPos -  3);
+        var textAfter = text.value.substring(cursorPos);
+        text.value = textBefore + textAfter;
+
+        text.selectionStart = text.selectionEnd = cursorPos -  3;
     }
 
-    if (lineIndex == -1) {
-      lineIndex = lines.length - 1;
-    }
-
-    lines.splice(lineIndex, 1);
-    text.value = lines.join('\n') + "\n";
+    console.log("Cleared line");
   }
 
   // Save our current text
